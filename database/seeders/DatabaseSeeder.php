@@ -206,17 +206,17 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Kedisplinan',
                 'description' => 'kedisplinan',
-                'weight' => 30.00,
+                'weight' => 30,
             ],
             [
                 'name' => 'Keterampilan Teknis',
                 'description' => 'Keterampilan Teknis',
-                'weight' => 30.00,
+                'weight' => 30,
             ],
             [
                 'name' => 'Kepribadian',
                 'description' => 'Kepribadian',
-                'weight' => 40.00,
+                'weight' => 40,
             ],
         ];
         foreach ($criteria as $data) {
@@ -229,16 +229,16 @@ class DatabaseSeeder extends Seeder
 
         $criteriaDetails = [
             'Kedisplinan' => [
-                ['name' => 'Kehadiran', 'description' => 'Tingkat kehadiran secara rutin', 'weight' => 30.00],
-                ['name' => 'Kepatuhan terhadap aturan', 'description' => 'Mematuhi peraturan perusahaan', 'weight' => 70.00],
+                ['name' => 'Kehadiran', 'description' => 'Tingkat kehadiran secara rutin', 'weight' => 30],
+                ['name' => 'Kepatuhan terhadap aturan', 'description' => 'Mematuhi peraturan perusahaan', 'weight' => 70],
             ],
             'Keterampilan Teknis' => [
-                ['name' => 'Kemampuan Operasional', 'description' => 'Mengoperasikan alat/sistem kerja', 'weight' => 50.00],
-                ['name' => 'Pemecahan Masalah', 'description' => 'Mampu mengatasi masalah teknis', 'weight' => 50.00],
+                ['name' => 'Kemampuan Operasional', 'description' => 'Mengoperasikan alat/sistem kerja', 'weight' => 50],
+                ['name' => 'Pemecahan Masalah', 'description' => 'Mampu mengatasi masalah teknis', 'weight' => 50],
             ],
             'Kepribadian' => [
-                ['name' => 'Etika Kerja', 'description' => 'Sikap dan perilaku profesional', 'weight' => 40.00],
-                ['name' => 'Kerja Sama', 'description' => 'Bekerja sama dalam tim', 'weight' => 60.00],
+                ['name' => 'Etika Kerja', 'description' => 'Sikap dan perilaku profesional', 'weight' => 40],
+                ['name' => 'Kerja Sama', 'description' => 'Bekerja sama dalam tim', 'weight' => 60],
             ],
         ];
 

@@ -35,9 +35,9 @@
 
                         <!-- Bobot -->
                         <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Bobot</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Bobot (%)</label>
                             <div class="col-sm-12 col-md-7">
-                                <input type="number" class="form-control" wire:model.defer="weight">
+                                <input type="number" class="form-control" wire:model.defer="weight" min="0" max="100" step="1">
                                 @error('weight') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                                 </td>
                                 <td>{{ $criteria->name }}</td>
                                 <td>{{ $criteria->description }}</td>
-                                <td>{{ $criteria->weight }}</td>
+                                <td>{{ $criteria->weight }}%</td>
                                 <td>
                                     <button wire:click="criteriaSetting({{ $criteria->id }})" class="btn btn-secondary"><i class="fa-solid fa-gear"></i></button>
                                     <button wire:click="edit({{ $criteria->id }})" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></button>
@@ -116,6 +116,9 @@
                             </tr>
                         @endforelse
                         </tbody>
+                        <tr>
+                            <td colspan="5" class="text-center font-weight-bold text-white bg-primary">Total : {{ $criterias->sum('weight') }}%</td>
+                        </tr>
                     </table>
                 </div>
             </div>

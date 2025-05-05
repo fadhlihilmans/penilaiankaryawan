@@ -18,11 +18,11 @@ class EvaluationScore extends Model
 
     public function evaluated()
     {
-        return $this->belongsTo(User::class, 'evaluated_user_id');
+        return $this->belongsTo(Employee::class, 'evaluated_employee_id');
     }
 
-    public function criteria()
+    public function criteriaDetail()
     {
-        return $this->belongsTo(EvaluationCriteriaDetail::class);
+        return $this->belongsTo(EvaluationCriteriaDetail::class, 'evaluation_criteria_detail_id');
     }
 }

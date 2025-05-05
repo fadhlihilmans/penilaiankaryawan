@@ -68,11 +68,6 @@ class User extends Authenticatable
         return $this->hasMany(EvaluationScore::class, 'evaluator_user_id');
     }
 
-    public function evaluated()
-    {
-        return $this->hasMany(EvaluationScore::class, 'evaluated_user_id');
-    }
-
     public function getRoleBadgeAttribute()
     {
         $role = $this->roles()->first();

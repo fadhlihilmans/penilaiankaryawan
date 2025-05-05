@@ -26,11 +26,10 @@ class Employee extends Model
     {
         return $this->belongsTo(Education::class, 'education_id');
     }
-
-    // public function evaluations()
-    // {
-    //     return $this->hasMany(EvaluationScore::class);
-    // }
+    public function evaluated()
+    {
+        return $this->hasMany(EvaluationScore::class, 'evaluated_user_id');
+    }
 
     public function getStatusAttribute()
     {

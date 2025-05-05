@@ -38,6 +38,15 @@ class CriteriaList extends Component
                 'weight.required' => 'Bobot wajib diisi.',
             ]);
 
+            // max 100
+            $totalWeight = EvaluationCriteria::sum('weight');
+            $newWeight = floatval($this->weight);
+
+            if ($totalWeight + $newWeight > 100) {
+                $this->dispatch('failed-message', 'Total bobot tidak boleh melebihi 100%.');
+                return;
+            }
+
             EvaluationCriteria::create([
                 'name' => $this->name,
                 'description' => $this->description,
@@ -77,7 +86,16 @@ class CriteriaList extends Component
                 'weight.required' => 'Bobot wajib diisi.',
             ]);
 
+            // max 100
             $criteria = EvaluationCriteria::findOrFail($this->criteria_id);
+
+            $totalWeight = EvaluationCriteria::where('id', '!=', $criteria->id)->sum('weight');
+            $newWeight = floatval($this->weight);
+    
+            if ($totalWeight + $newWeight > 100) {
+                $this->dispatch('failed-message', 'Total bobot tidak boleh melebihi 100%.');
+                return;
+            }
 
             $criteria->update([
                 'name' => $this->name,
@@ -114,7 +132,7 @@ class CriteriaList extends Component
 
     public function criteriaSetting($id)
     {
-        return redirect()->route('evaluasi-kriteria.detail', ['id' => $id]);
+        return redirect()->route('admin.evaluasi-kriteria.detail', ['id' => $id]);
     }
 
     public function resetForm()

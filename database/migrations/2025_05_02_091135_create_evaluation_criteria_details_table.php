@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('evaluation_criteria_id')->references('id')->on('evaluation_criterias');
             $table->string('name');
             $table->text('description');
-            $table->decimal('weight', 5, 2);
+            $table->integer('weight');
             $table->timestamps();
             $table->softDeletes();
         });

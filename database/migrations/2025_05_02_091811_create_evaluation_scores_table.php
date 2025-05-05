@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('evaluation_scores', function (Blueprint $table) {
             $table->id();
             $table->foreignId('evaluator_user_id')->references('id')->on('users');
-            $table->foreignId('evaluated_user_id')->references('id')->on('users');
+            $table->foreignId('evaluated_employee_id')->references('id')->on('employees');
             $table->foreignId('evaluation_criteria_detail_id')->references('id')->on('evaluation_criteria_details');
             $table->text('comment')->nullable();
             $table->date('date');
-            $table->decimal('score', 5, 2);
+            $table->integer('weight');
             $table->timestamps();
         });
     }

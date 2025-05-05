@@ -24,21 +24,21 @@
                             </div>
                         </div>
 
-                        <!-- Nama -->
-                        <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Bobot</label>
-                            <div class="col-sm-12 col-md-7">
-                                <input type="number" class="form-control" wire:model.defer="weight">
-                                @error('weight') <small class="text-danger">{{ $message }}</small> @enderror
-                            </div>
-                        </div>
-
                         <!-- Description -->
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Deskripsi</label>
                             <div class="col-sm-12 col-md-7">
                                 <textarea class="form-control" wire:model.defer="description" rows="5"></textarea>
                                 @error('description') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
+                        </div>
+
+                        <!-- Bobot -->
+                        <div class="form-group row mb-4">
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Bobot (%)</label>
+                            <div class="col-sm-12 col-md-7">
+                                <input type="number" class="form-control" wire:model.defer="weight" min="0" max="100">
+                                @error('weight') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
                         </div>
 
@@ -68,6 +68,9 @@
 @if (!$formAdd && !$formEdit)
 <section class="section">
     <div class="section-header">
+        <div class="section-header-back">
+            <a href="{{ route('admin.evaluasi-kriteria.list') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+        </div>
         <h1>Data Detail Evaluasi</h1>
     </div>
 
@@ -76,7 +79,9 @@
         <div class="col-12">
             <div class="card">
             <div class="card-header">
-                <h4>List Detail Evaluasi</h4>
+                @if ($criterias->isNotEmpty())
+                    <h4>List Detail Evaluasi '{{ $criterias->first()->criteria->name }}'  ({{ $criterias->first()->criteria->weight }}%)</h4>
+                @endif
                 <div class="card-header-action">
                     <button wire:click="$set('formAdd', true)" class="btn btn-primary">Tambah Data</button>
                 </div>
@@ -103,7 +108,7 @@
                                 </td>
                                 <td>{{ $criteria->name }}</td>
                                 <td>{{ $criteria->description }}</td>
-                                <td>{{ $criteria->weight }}</td>
+                                <td>{{ $criteria->weight }}%</td>
                                 <td>
                                     <button wire:click="edit({{ $criteria->id }})" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></button>
                                     <button wire:click="confirmDelete({{ $criteria->id }})" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
@@ -115,6 +120,9 @@
                             </tr>
                         @endforelse
                         </tbody>
+                        <tr>
+                            <td colspan="5" class="text-center font-weight-bold text-white bg-primary">Total : {{ $criterias->sum('weight') }}%</td>
+                        </tr>
                     </table>
                 </div>
             </div>

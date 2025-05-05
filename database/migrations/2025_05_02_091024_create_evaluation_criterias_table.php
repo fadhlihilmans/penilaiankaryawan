@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->decimal('weight', 5, 2);
+            $table->integer('weight');
             $table->timestamps();
             $table->softDeletes();
         });

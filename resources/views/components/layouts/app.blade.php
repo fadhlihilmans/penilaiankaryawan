@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  @livewireStyles
+
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   {{-- <title> &mdash; {{ config('app.name') }}</title> --}}
@@ -15,6 +17,12 @@
   <link rel="stylesheet" href="/assets/etc/datatables.net-select-bs4/css/select.bootstrap4.min.css">
   <link rel="stylesheet" href="/assets/etc/summernote/dist/summernote-bs4.css">
   <link rel="stylesheet" href="/assets/etc/selectric/public/selectric.css">
+  <link rel="stylesheet" href="/assets/etc/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
+  <link rel="stylesheet" href="/assets/etc/bootstrap-daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="/assets/etc/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
+  <link rel="stylesheet" href="/assets/etc/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="/assets/etc/selectric/public/selectric.css">
+  <link rel="stylesheet" href="/assets/etc/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
   <link rel="stylesheet" href="/assets/etc/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
   {{-- <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"> --}}
   <link rel="stylesheet" type="text/css" href="/assets/toastify/toastify.min.css">
@@ -39,15 +47,19 @@
             <img alt="image" src="/assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
             <div class="d-sm-none d-lg-inline-block">Hi, {{ Auth::user()->name }}</div></a>
             <div class="dropdown-menu dropdown-menu-right">
-              <a href="/admin/user/password" class="dropdown-item has-icon">
+              <a href="/admin/user/profile" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> Profile
               </a>
               <div class="dropdown-divider"></div>
-              <a href="/logout"    
+              {{-- <a href="/logout"    
                  onclick="return confirm('Apakah Anda yakin ingin logout?')" 
                  class="dropdown-item has-icon text-danger">
                   <i class="fa-solid fa-sign-out-alt"></i> Logout
+              </a> --}}
+              <a href="#" data-toggle="modal" data-target="#logoutModal" class="dropdown-item has-icon text-danger">
+                <i class="fa-solid fa-sign-out-alt"></i> Logout
               </a>
+            
             </div>
           </li>
         </ul>
@@ -56,27 +68,89 @@
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="index.html">Stisla</a>
+            <a href="/">E-Kinerja</a>
           </div>
           <div class="sidebar-brand sidebar-brand-sm">
-            <a href="index.html">St</a>
+            <a href="/">EK</a>
           </div>
           <ul class="sidebar-menu">
-              <li class="menu-header">Dashboard</li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fa-solid fa-fire"></i><span>Dashboard</span></a>
-                <ul class="dropdown-menu">
-                  <li><a class="nav-link" href="index-0.html">General Dashboard</a></li>
-                  <li><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li>
-                </ul>
-              </li>
-            </ul>
+            @if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('penilai'))
+            <li class="menu-header">Dashboard</li>
+            <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link">
+                    <i class="fa-solid fa-fire"></i><span>Dashboard</span>
+                </a>
+            </li>
+            @endif
 
-            <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+            @if (Auth::user()->hasRole('admin'))
+            <li class="menu-header">Manajemen User</li>
+            <li class="nav-item dropdown {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown">
+                    <i class="fa-solid fa-users"></i><span>User</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ request()->routeIs('admin.user.profile') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.user.profile') }}">Profil</a>
+                    </li>
+                    <li class="{{ request()->routeIs('admin.user.list') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.user.list') }}">Daftar User</a>
+                    </li>
+                </ul>
+            </li>
+        
+            <li class="menu-header">Karyawan</li>
+            <li class="nav-item dropdown {{ request()->routeIs('admin.karyawan.*') || request()->routeIs('admin.jabatan.*') || request()->routeIs('admin.pendidikan.*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown">
+                    <i class="fa-solid fa-briefcase"></i><span>Karyawan</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ request()->routeIs('admin.jabatan.list') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.jabatan.list') }}">Jabatan</a>
+                    </li>
+                    <li class="{{ request()->routeIs('admin.pendidikan.list') ? 'active' : '' }}">
+                      <a class="nav-link" href="{{ route('admin.pendidikan.list') }}">Pendidikan</a>
+                    </li>
+                    <li class="{{ request()->routeIs('admin.karyawan.list') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.karyawan.list') }}">Daftar Karyawan</a>
+                    </li>
+                </ul>
+            </li>
+            @endif
+
+            @if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('penilai'))
+            <li class="menu-header">Evaluasi</li>
+            <li class="nav-item dropdown {{ request()->routeIs('admin.evaluasi-kriteria.*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown">
+                    <i class="fa-solid fa-check-circle"></i><span>Evaluasi</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ request()->routeIs('admin.evaluasi-kriteria.list') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.evaluasi-kriteria.list') }}">Daftar Kriteria</a>
+                    </li>
+                    <li class="{{ request()->routeIs('admin.evaluasi-kriteria.nilai') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.evaluasi-kriteria.nilai') }}">Daftar Nilai</a>
+                    </li>
+                </ul>
+            </li>
+            @endif
+
+            @if (Auth::user()->hasRole('karyawan'))
+            <li class="menu-header">Nilai</li>
+            <li class="{{ request()->routeIs('admin.evaluasi-kriteria.nilai-karyawan') ? 'active' : '' }}">
+                <a href="{{ route('admin.evaluasi-kriteria.nilai-karyawan') }}" class="nav-link">
+                    <i class="fa-solid fa-check-circle"></i><span>Lihat Nilai</span>
+                </a>
+            </li>
+            @endif
+
+          </ul>
+        
+            {{-- <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
               <a href="https://getstisla.com/docs" class="btn btn-primary btn-lg btn-block btn-icon-split">
-                <i class="fa-solid fa-rocket"></i> Documentation
+                <i class="fa-solid fa-rocket"></i> Watermark
               </a>
-            </div>
+            </div> --}}
         </aside>
       </div>
 
@@ -94,6 +168,27 @@
         </div>
       </footer>
     </div>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Konfirmasi Logout</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  Apakah Anda yakin ingin logout?
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                  <a href="{{ route('logout') }}" class="btn btn-danger">Ya, Logout</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  
   </div>
 
   <!-- General JS Scripts -->
@@ -112,6 +207,15 @@
   <script src="/assets/etc/selectric/public/jquery.selectric.min.js"></script>
   <script src="/assets/etc/jquery_upload_preview/assets/js/jquery.uploadPreview.min.js"></script>
   <script src="/assets/etc/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+  <script src="/assets/etc/cleave.js/dist/cleave.min.js"></script>
+  <script src="/assets/etc/cleave.js/dist/addons/cleave-phone.us.js"></script>
+  <script src="/assets/etc/jquery-pwstrength/jquery.pwstrength.min.js"></script>
+  <script src="/assets/etc/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <script src="/assets/etc/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+  <script src="/assets/etc/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+  <script src="/assets/etc/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+  <script src="/assets/etc/select2/dist/js/select2.full.min.js"></script>
+  <script src="/assets/etc/selectric/public/jquery.selectric.min.js"></script>
 
 
   <!-- Template JS File -->
@@ -121,6 +225,9 @@
   <!-- Page Specific JS File -->
   <script src="/assets/js/page/modules-datatables.js"></script>
   <script src="/assets/js/page/features-post-create.js"></script>
+  <script src="/assets/js/page/forms-advanced-forms.js"></script>
+  <script src="/assets/js/page/index-0.js"></script>
+
 
   {{-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script> --}}
   <script type="text/javascript" src="/assets/toastify/toastify.min.js"></script>
@@ -186,6 +293,8 @@
             }).showToast();
         </script>
   @endif
+
+  @livewireScripts
 
   @stack('scripts')
 </body>

@@ -40,7 +40,7 @@ class PositionList extends Component
                 'description' => $this->description,
             ]);
 
-            $this->reset();
+            $this->resetForm();
             $this->getData();
             $this->dispatch('success-message', 'Data berhasil ditambahkan.');
 

@@ -20,9 +20,9 @@ class ScoreList extends Component
     public $year;
     public $selectedEmployeeId = null;
     public $scores = [];
-    public $comments = []; // For storing comments
+    public $comments = []; 
 
-    // Form states
+    
     public $selectingPeriod = true;
     public $selectingCriteria = false;
     public $scoringEmployee = false;
@@ -31,12 +31,12 @@ class ScoreList extends Component
     public $scoreDetails = false;
     public $selectedEmployee = null;
 
-    // For score calculation and summary
+    
     public $totalScore = 0;
     public $criteriaScores = [];
     public $detailScores = [];
 
-    // For results viewing
+    
     public $viewingResults = false;
     public $resultEmployeeId = null;
     public $resultPeriod = null;
@@ -57,10 +57,10 @@ class ScoreList extends Component
     {
         $this->employees = Employee::with('user')->orderBy('nip')->get();
         $this->criteria = EvaluationCriteria::with('details')->get();
-        // Set default selected criteria to all available criteria
+        
         $this->selectedCriteriaIds = $this->criteria->pluck('id')->toArray();
-        // $this->month = date('m');
-        // $this->year = date('Y');
+        
+        $this->year = date('Y');
     }
 
     public function render()
@@ -72,10 +72,15 @@ class ScoreList extends Component
     {
         $this->validate([
             'month' => 'required|numeric|min:1|max:12',
-            'year' => 'required|numeric|min:2020|max:2100',
+            'year' => 'required|numeric|min:2000|max:2100',
+        ], [
+            'month.required' => 'Bulan harus dipilih',
+            'year.required' => 'Tahun harus diisi',
         ]);
 
-        $this->selectedPeriod = $this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT);
+        $month = str_pad($this->month, 2, '0', STR_PAD_LEFT);
+
+        $this->selectedPeriod = $this->year . '-' . $month;
         $this->selectingPeriod = false;
         $this->employeeList = true;
     }
@@ -85,16 +90,16 @@ class ScoreList extends Component
         $this->selectedEmployeeId = $employeeId;
         $this->selectedEmployee = Employee::with('user', 'position')->find($employeeId);
 
-        // Initialize scores array for this employee
+        
         $this->scores = [];
         $this->comments = [];
 
-        // Get all criteria with their details since we're using all criteria
+        
         $selectedCriteria = EvaluationCriteria::with(['details' => function($query) {
             $query->orderBy('name');
         }])->whereIn('id', $this->selectedCriteriaIds)->get();
 
-        // Check if there are existing scores for this period and employee
+        
         $existingScores = EvaluationScore::where('evaluated_employee_id', $employeeId)
             ->whereDate('date', $this->selectedPeriod . '-01')
             ->get();
@@ -118,7 +123,7 @@ class ScoreList extends Component
 
     public function saveScores()
     {
-        // Validate that all scores are filled
+        
         $rules = [];
         foreach ($this->scores as $detailId => $score) {
             $rules["scores.$detailId"] = 'required|numeric|min:0|max:100';
@@ -134,7 +139,7 @@ class ScoreList extends Component
         try {
             DB::beginTransaction();
             
-            $date = $this->selectedPeriod . '-01'; // First day of the selected month
+            $date = $this->selectedPeriod . '-01'; 
             
             foreach ($this->scores as $detailId => $score) {
                 $detail = EvaluationCriteriaDetail::find($detailId);
@@ -143,7 +148,7 @@ class ScoreList extends Component
                     throw new \Exception("Detail kriteria tidak ditemukan");
                 }
                 
-                // Check if score exists
+                
                 $existingScore = EvaluationScore::where('evaluated_employee_id', $this->selectedEmployeeId)
                     ->where('evaluation_criteria_detail_id', $detailId)
                     ->whereDate('date', $date)
@@ -192,7 +197,7 @@ class ScoreList extends Component
         $criteriaScores = [];
         $detailScores = [];
 
-        // Group scores by criteria
+        
         foreach ($scores as $score) {
             if (!$score->criteriaDetail || !$score->criteriaDetail->criteria) {
                 continue; 
@@ -200,14 +205,14 @@ class ScoreList extends Component
             
             $criteriaId = $score->criteriaDetail->criteria->id;
             $criteriaName = $score->criteriaDetail->criteria->name;
-            $criteriaWeight = $score->criteriaDetail->criteria->weight / 100; // Convert to decimal
+            $criteriaWeight = $score->criteriaDetail->criteria->weight / 100; 
             
             $detailId = $score->criteriaDetail->id;
             $detailName = $score->criteriaDetail->name;
-            $detailWeight = $score->criteriaDetail->weight / 100; // Convert to decimal
+            $detailWeight = $score->criteriaDetail->weight / 100; 
             $scoreValue = $score->weight;
             
-            // Initialize if not exists
+            
             if (!isset($criteriaScores[$criteriaId])) {
                 $criteriaScores[$criteriaId] = [
                     'name' => $criteriaName,
@@ -218,7 +223,7 @@ class ScoreList extends Component
                 ];
             }
             
-            // Add detail score
+            
             $detailWeightedScore = $scoreValue * $detailWeight;
             $criteriaScores[$criteriaId]['details'][$detailId] = [
                 'name' => $detailName,
@@ -227,21 +232,21 @@ class ScoreList extends Component
                 'weighted_score' => $detailWeightedScore
             ];
             
-            // Accumulate score for this criteria
+            
             $criteriaScores[$criteriaId]['score'] += $detailWeightedScore;
             
-            // Store individual detail scores for display
+            
             $detailScores[$detailId] = [
                 'name' => $detailName,
-                'weight' => $detailWeight * 100, // Back to percentage for display
+                'weight' => $detailWeight * 100, 
                 'criteria_name' => $criteriaName,
-                'criteria_weight' => $criteriaWeight * 100, // Back to percentage for display
+                'criteria_weight' => $criteriaWeight * 100, 
                 'score' => $scoreValue,
                 'comment' => $score->comment
             ];
         }
 
-        // Calculate final weighted scores for each criteria and total
+        
         foreach ($criteriaScores as $criteriaId => $criteriaData) {
             $weightedScore = $criteriaData['score'] * $criteriaData['weight'];
             $criteriaScores[$criteriaId]['weighted_score'] = $weightedScore;

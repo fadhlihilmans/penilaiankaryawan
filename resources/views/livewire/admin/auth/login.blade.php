@@ -8,7 +8,7 @@
         <div class="card card-primary">
             <div class="card-header"><h4>Login</h4></div>
                 <div class="card-body">
-                    <form wire:submit="login" class="needs-validation" novalidate="">
+                    <form wire:submit.prevent="login" class="needs-validation" novalidate="">
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input id="email" type="email" class="form-control" wire:model="email" tabindex="1" required autofocus>

@@ -28,7 +28,7 @@ class Employee extends Model
     }
     public function evaluated()
     {
-        return $this->hasMany(EvaluationScore::class, 'evaluated_user_id');
+        return $this->hasMany(EvaluationScore::class, 'evaluated_employee_id');
     }
 
     public function getStatusAttribute()

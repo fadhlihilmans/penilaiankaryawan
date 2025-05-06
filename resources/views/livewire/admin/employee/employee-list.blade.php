@@ -20,7 +20,7 @@
                             <div class="col-sm-12 col-md-7">
                                 <div id="image-preview" class="image-preview" style="cursor: pointer !important; background-image: url({{ $image ? $image->temporaryUrl() : ($oldImage ? '/images/employee/' . $oldImage : '/assets/img/avatar/avatar-3.png') }}); background-size: cover;">
                                     <label for="image-upload" id="image-label">Pilih File</label>
-                                    <input type="file" id="image-upload" wire:model="image" />
+                                    <input type="file" id="image-upload" wire:model.defer="image" />
                                 </div>
                                 @error('image') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
@@ -75,7 +75,7 @@
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Gender</label>
                             <div class="col-sm-12 col-md-7">
-                                <select class="form-control" wire:model="gender">
+                                <select class="form-control selectric" wire:model.defer="gender">
                                     <option value="">-- Pilih Gender --</option>
                                         <option value="male">Laki-laki</option>
                                         <option value="female">Perempuan</option>
@@ -88,7 +88,7 @@
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Status</label>
                             <div class="col-sm-12 col-md-7">
-                                <select class="form-control" wire:model="employment_status">
+                                <select class="form-control selectric" wire:model.defer="employment_status">
                                     <option value="">-- Pilih Status Kepegawaian --</option>
                                         <option value="permanent">Tetap</option>
                                         <option value="non-permanent">Tidak Tetap</option>
@@ -101,7 +101,7 @@
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Pendidikan Terakhir</label>
                             <div class="col-sm-12 col-md-7">
-                                <select class="form-control" wire:model="education_id">
+                                <select class="form-control selectric" wire:model.defer="education_id">
                                     <option value="">-- Pilih Pendidikan Terakhir --</option>
                                     @foreach ($educations as $education)
                                         <option value="{{ $education->id }}">{{ $education->name }}</option>
@@ -115,7 +115,7 @@
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jabatan</label>
                             <div class="col-sm-12 col-md-7">
-                                <select class="form-control" wire:model="position_id">
+                                <select class="form-control selectric" wire:model.defer="position_id">
                                     <option value="">-- Pilih Jabatan --</option>
                                     @foreach ($positions as $position)
                                         <option value="{{ $position->id }}">{{ $position->name }}</option>
@@ -371,5 +371,5 @@
 </section>
 @endif
 
-</div>
 
+</div>

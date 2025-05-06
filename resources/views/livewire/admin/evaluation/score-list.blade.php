@@ -16,7 +16,8 @@
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Bulan</label>
                             <div class="col-sm-12 col-md-7">
-                                <select class="form-control" wire:model="month">
+                                <!-- Remove selectric class -->
+                                <select class="form-control selectric" wire:model="month">
                                     <option value="">-- Pilih Bulan --</option>
                                     <option value="1">Januari</option>
                                     <option value="2">Februari</option>
@@ -37,14 +38,14 @@
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tahun</label>
                             <div class="col-sm-12 col-md-7">
-                                <input type="number" class="form-control" wire:model.defer="year" min="2020" max="2100">
+                                <input type="number" class="form-control" wire:model="year" min="2000" max="2100">
                                 @error('year') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
                         </div>
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                             <div class="col-sm-12 col-md-7">
-                                <button wire:click="goToEmployeeList" class="btn btn-primary">Selanjutnya</button>
+                                <button type="button" wire:click="goToEmployeeList" class="btn btn-primary">Selanjutnya</button>
                             </div>
                         </div>
                     </div>

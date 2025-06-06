@@ -38,7 +38,8 @@ class EducationList extends Component
 
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'Data berhasil ditambahkan.');
+            session()->flash('success-message', 'Data berhasil ditambahkan.');
+            return redirect()->route('admin.pendidikan.list');
 
         }catch(\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
@@ -71,7 +72,8 @@ class EducationList extends Component
 
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'Data berhasil diubah.');
+            session()->flash('success-message', 'Data berhasil diubah.');
+            return redirect()->route('admin.pendidikan.list');
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
         }
@@ -90,7 +92,8 @@ class EducationList extends Component
             $education->delete();
             $this->getData();
             $this->confirmingDelete = false;
-            $this->dispatch('success-message', 'Data berhasil dihapus.');
+            session()->flash('success-message', 'Data berhasil dihapus.');
+            return redirect()->route('admin.pendidikan.list');
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
         }

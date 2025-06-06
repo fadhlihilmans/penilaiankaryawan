@@ -71,7 +71,8 @@ class UserList extends Component
             DB::commit();
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'User berhasil ditambahkan.');
+            session()->flash('success-message', 'User berhasil ditambahkan.');
+            return redirect()->route('admin.user.list');
         } catch (\Throwable $th) {
             DB::rollBack();
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
@@ -122,7 +123,8 @@ class UserList extends Component
             DB::commit();
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'User berhasil diupdate.');
+            session()->flash('success-message', 'User berhasil diupdate.');
+            return redirect()->route('admin.user.list');
         } catch (\Throwable $th) {
             DB::rollBack();
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
@@ -145,11 +147,6 @@ class UserList extends Component
         $this->confirmingDelete = true;
     }
 
-    public function confirmResetPassword()
-    {
-        $this->confirmingResetPassword = true;
-    }
-
     public function deleteConfirmed()
     {
         try {
@@ -158,12 +155,16 @@ class UserList extends Component
             $user->delete();
             $this->getData();
             $this->confirmingDelete = false;
-            $this->dispatch('success-message', 'User berhasil dihapus.');
+            session()->flash('success-message', 'User berhasil dihapus.');
+            return redirect()->route('admin.user.list');
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
         }
     }
-
+    public function confirmResetPassword()
+    {
+        $this->confirmingResetPassword = true;
+    }
     public function resetPasswordConfirmed()
     {
         try {
@@ -173,6 +174,7 @@ class UserList extends Component
 
             $this->confirmingResetPassword = false;
             $this->dispatch('success-message', 'Password berhasil direset.');
+            // return redirect()->route('admin.user.list');
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
         }

@@ -22,7 +22,7 @@ Route::get('/logout', function () {
     return redirect('/admin/login');
 })->name('logout')->middleware('auth');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     Route::get('/dashboard', \App\Livewire\Admin\Dashboard\Dashboard::class)
         ->name('dashboard')

@@ -42,7 +42,8 @@ class PositionList extends Component
 
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'Data berhasil ditambahkan.');
+            session()->flash('success-message', 'Data berhasil ditambahkan.');
+            return redirect()->route('admin.jabatan.list');
 
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
@@ -79,7 +80,8 @@ class PositionList extends Component
 
             $this->reset();
             $this->getData();
-            $this->dispatch('success-message', 'Data berhasil diubah.');
+            session()->flash('success-message', 'Data berhasil diubah.');
+            return redirect()->route('admin.jabatan.list');
 
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
@@ -98,7 +100,8 @@ class PositionList extends Component
             $position->delete();
             $this->getData();
             $this->confirmingDelete = false;
-            $this->dispatch('success-message', 'Data berhasil dihapus.');
+            session()->flash('success-message', 'Data berhasil dihapus.');
+            return redirect()->route('admin.jabatan.list');
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
         }

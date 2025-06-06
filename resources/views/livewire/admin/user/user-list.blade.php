@@ -53,7 +53,6 @@
                                 <button wire:click="confirmResetPassword" class="btn btn-primary">Reset Password</button>
                             </div>
                         </div>
-
                         @endif
 
                         <!-- Tombol -->

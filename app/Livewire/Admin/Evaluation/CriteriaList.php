@@ -55,7 +55,8 @@ class CriteriaList extends Component
 
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'Data berhasil ditambahkan.');
+            session()->flash('success-message', 'Data berhasil ditambahkan.');
+            return redirect()->route('admin.evaluasi-kriteria.list');
 
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
@@ -105,7 +106,8 @@ class CriteriaList extends Component
 
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'Data berhasil diubah.');
+            session()->flash('success-message', 'Data berhasil diubah.');
+            return redirect()->route('admin.evaluasi-kriteria.list');
 
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
@@ -124,7 +126,8 @@ class CriteriaList extends Component
             $criteria->delete();
             $this->getData();
             $this->confirmingDelete = false;
-            $this->dispatch('success-message', 'User berhasil dihapus.');
+            session()->flash('success-message', 'User berhasil dihapus.');
+            return redirect()->route('admin.evaluasi-kriteria.list');
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
         }

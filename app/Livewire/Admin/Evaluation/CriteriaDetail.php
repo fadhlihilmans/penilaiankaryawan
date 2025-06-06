@@ -54,7 +54,8 @@ class CriteriaDetail extends Component
         
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'Data berhasil ditambahkan.');
+            session()->flash('success-message', 'Data berhasil ditambahkan.');
+            return redirect()->route('admin.evaluasi-kriteria.detail', ['id' => $this->criteriaId]);
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
         }
@@ -97,7 +98,8 @@ class CriteriaDetail extends Component
     
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'Data berhasil diubah.');
+            session()->flash('success-message', 'Data berhasil diubah.');
+            return redirect()->route('admin.evaluasi-kriteria.detail', ['id' => $this->criteriaId]);
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
         }
@@ -115,7 +117,8 @@ class CriteriaDetail extends Component
         $detail->delete();
         $this->getData();
         $this->confirmingDelete = false;
-        $this->dispatch('success-message', 'Data berhasil dihapus.');
+        session()->flash('success-message', 'Data berhasil dihapus.');
+        return redirect()->route('admin.evaluasi-kriteria.detail', ['id' => $this->criteriaId]);
     }
 
     public function resetForm()

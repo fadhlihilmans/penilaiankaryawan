@@ -30,12 +30,10 @@ class Login extends Component
             if (Auth::attempt($credentials)) {
                  session()->regenerate();
                 if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('penilai')) {
-                    //  return redirect('/admin/dashboard');
                      return $this->redirect('/admin/dashboard');
 
                  }else{
-                    return $this->redirect('/admin/dashboard');
-                    // return redirect('/admin/user/profile');
+                    return $this->redirect('/admin/user/profile');
                  }
             }else{
                 $this->dispatch('failed-message', 'Akun tidak ditemukan atau password salah');

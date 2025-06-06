@@ -99,7 +99,7 @@
                                             </td>
                                             <td>{{ $employee->nip }}</td>
                                             <td>{{ $employee->user->name }}</td>
-                                            <td>{{ $employee->position->name }}</td>
+                                            <td>{{ $employee->position->name ?? '-' }}</td>
                                             <td>{!! $employee->status !!}</td>
                                             <td>
                                                 <button wire:click="startScoring({{ $employee->id }})" class="btn btn-sm btn-primary">Nilai</button>
@@ -150,7 +150,7 @@
                                 <div class="col-md-10">
                                     <h5>{{ $selectedEmployee->user->name }}</h5>
                                     <p class="mb-1">NIP: {{ $selectedEmployee->nip }}</p>
-                                    <p class="mb-1">Jabatan: {{ $selectedEmployee->position->name }}</p>
+                                    <p class="mb-1">Jabatan: {{ $selectedEmployee->position->name ?? '-'}}</p>
                                     <p class="mb-1">Status: {!! $selectedEmployee->status !!}</p>
                                     <p class="mb-1">Periode Penilaian: {{ $this->monthName }} {{ $year }}</p>
                                 </div>
@@ -237,7 +237,7 @@
                                 <div class="col-md-10">
                                     <h5>{{ $selectedEmployee->user->name }}</h5>
                                     <p class="mb-1">NIP: {{ $selectedEmployee->nip }}</p>
-                                    <p class="mb-1">Jabatan: {{ $selectedEmployee->position->name }}</p>
+                                    <p class="mb-1">Jabatan: {{ $selectedEmployee->position->name ?? '-' }}</p>
                                     <p class="mb-1">Status: {!! $selectedEmployee->status !!}</p>
                                     <p class="mb-1">Periode Penilaian: {{ $this->monthName }} {{ $year }}</p>
                                 </div>

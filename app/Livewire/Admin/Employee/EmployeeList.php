@@ -110,7 +110,8 @@ class EmployeeList extends Component
 
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'User berhasil ditambahkan.');
+            session()->flash('success-message', 'User berhasil ditambahkan.');
+            return redirect()->route('admin.karyawan.list');
         
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -207,7 +208,8 @@ class EmployeeList extends Component
 
             $this->resetForm();
             $this->getData();
-            $this->dispatch('success-message', 'User berhasil diupdate.');
+            session()->flash('success-message', 'User berhasil diupdate.');
+            return redirect()->route('admin.karyawan.list');
 
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -236,7 +238,8 @@ class EmployeeList extends Component
             $employee->delete();
             $this->getData();
             $this->confirmingDelete = false;
-            $this->dispatch('success-message', 'User berhasil dihapus.');
+            session()->flash('success-message', 'User berhasil dihapus.');
+            return redirect()->route('admin.karyawan.list');
         } catch (\Throwable $th) {
             $this->dispatch('failed-message', 'Terjadi kesalahan: ' . $th->getMessage());
         }
